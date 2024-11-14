@@ -4,27 +4,42 @@
 
 package frc.robot.commands.Drive;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class DefaultDrive extends Command {
   /** Creates a new DefaultDrive. */
-  public DefaultDrive() {
+  private DriveSubsystem m_drive;
+  private DoubleSupplier m_xspeed;
+  private DoubleSupplier m_yspeed;
+  private DoubleSupplier m_rotspeed;
+  public DefaultDrive(DriveSubsystem drive, DoubleSupplier joyleftx, DoubleSupplier joylefty, DoubleSupplier joyrightx) {
+    m_drive = drive;
+    m_xspeed = joyleftx;
+    m_yspeed = joylefty;
+    m_rotspeed = joyrightx;
+    addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drive.drive(m_xspeed.getAsDouble(), m_yspeed.getAsDouble(), m_rotspeed.getAsDouble(), true, false);
+    m_drive.controllerXYUpdate((m_xspeed.getAsDouble()));
+  }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
